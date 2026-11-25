@@ -30,6 +30,7 @@ import {
 import { useAuth, AuthOverlay, getAuthToken, useQuery } from 'deepspace'
 // Paths resolve post-install (page → src/pages/, components → src/components/).
 import { ChatPanel } from '../../../components/ChatPanel'
+import { GIA_MODELS } from '../../../components/studysprint/StudyBuddy'
 
 const CHAT_W_MIN = 320
 const CHAT_W_MAX = 720
@@ -296,6 +297,7 @@ export default function AiChatPage() {
               chatId={activeChatId}
               userId={userId}
               onChatCreated={setActiveChatId}
+              models={GIA_MODELS}
               disabled={creatingChat}
               className="!bg-transparent"
               compact

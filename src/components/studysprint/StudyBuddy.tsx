@@ -6,8 +6,25 @@
  */
 
 import { useState } from 'react'
-import { useAuth } from 'deepspace'
+import { listDeepSpaceAgentModels, useAuth } from 'deepspace'
 import { ChatPanel } from '../ChatPanel'
+
+/**
+ * Gia's model list, free-plan-friendly first. The platform default
+ * (Claude Opus) answers "Payment Required" for students on DeepSpace's
+ * free plan, while Claude Haiku works — so Haiku leads the list and is
+ * every fresh chat's default. Students can still pick a bigger model
+ * in the picker.
+ */
+export const GIA_MODELS = listDeepSpaceAgentModels('application')
+  .map((model) => ({
+    id: model.id,
+    label: model.label,
+    provider: model.providerLabel,
+  }))
+  .sort((a, b) =>
+    a.id === 'claude-haiku-5-5' ? -1 : b.id === 'claude-haiku-5-5' ? 1 : 0,
+  )
 
 export default function StudyBuddy({ subject }: { subject: string }) {
   const { userId } = useAuth()
@@ -24,6 +41,7 @@ export default function StudyBuddy({ subject }: { subject: string }) {
           chatId={chatId}
           userId={userId}
           onChatCreated={setChatId}
+          models={GIA_MODELS}
           compact
           emptyStatePrompts={[
             `Explain a ${subject} topic I'm stuck on, step by step`,
